@@ -66,7 +66,6 @@ Install with pip::
 Testing
 -------
 
-Tests are in the included "testproject".  Run them by navigating into the
-testproject directory, and running::
+Tests included.  Test in a django project with::
 
-    python manage.py test tester
+    python manage.py test remoteforeignkey
