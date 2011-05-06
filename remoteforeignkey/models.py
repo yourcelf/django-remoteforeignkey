@@ -64,9 +64,6 @@ class RemoteForeignObjectsDescriptor(object):
         manager.clear()
         manager.add(value)
 
-
-
-# Create your models here.
 class RemoteForeignKey(models.ManyToManyField):
     def __init__(self, to, **kwargs):
         # copied from parent only to change rel type to OneToManyRel
