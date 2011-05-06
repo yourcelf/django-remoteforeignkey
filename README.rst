@@ -61,7 +61,7 @@ Installation
 
 Install with pip::
 
-    pip install -e http://github.com/yourcelf/django-remoteforeignkey.git#egg=remoteforeignkey
+    pip install -e git+http://github.com/yourcelf/django-remoteforeignkey.git#egg=remoteforeignkey
 
 Testing
 -------
