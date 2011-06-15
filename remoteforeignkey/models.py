@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.fields.related import SingleRelatedObjectDescriptor, curry, ManyToManyRel, Field, _, string_concat, create_many_related_manager, router, ReverseManyRelatedObjectsDescriptor, RECURSIVE_RELATIONSHIP_CONSTANT
+from django.db.models.fields.related import SingleRelatedObjectDescriptor, curry, ManyToManyRel, Field, _, string_concat, create_many_related_manager, router, ReverseManyRelatedObjectsDescriptor, RECURSIVE_RELATIONSHIP_CONSTANT, add_lazy_relation
 
 class OneToManyRel(ManyToManyRel):
     """
@@ -65,6 +65,7 @@ class RemoteForeignObjectsDescriptor(object):
         manager.add(value)
 
 class RemoteForeignKey(models.ManyToManyField):
+    description = _("One-to-many relationship")
     def __init__(self, to, **kwargs):
         # copied from parent only to change rel type to OneToManyRel
         try:
@@ -76,6 +77,7 @@ class RemoteForeignKey(models.ManyToManyField):
         kwargs['rel'] = OneToManyRel(to,
             related_name=kwargs.pop('related_name', None),
             limit_choices_to=kwargs.pop('limit_choices_to', None),
+            symmetrical=kwargs.pop('symmetrical', to==RECURSIVE_RELATIONSHIP_CONSTANT),
             through=kwargs.pop('through', None))
 
         self.db_table = kwargs.pop('db_table', None)
@@ -171,6 +173,7 @@ def create_one_to_many_intermediary_model(field, klass):
         to_model = field.rel.to
         managed = klass._meta.managed or to_model._meta.managed
     name = '%s_%s' % (klass._meta.object_name, field.name)
+
     if field.rel.to == RECURSIVE_RELATIONSHIP_CONSTANT or to == klass._meta.object_name:
         from_ = 'from_%s' % to.lower()
         to = 'to_%s' % to.lower()
